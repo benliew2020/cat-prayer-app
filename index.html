@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>六月康复祈福</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    user-select: none;
+  }
+
+  .header {
+    text-align: center;
+    padding: 30px 20px 10px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f6d365, #fda085);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* Cat area */
+  .cat-container {
+    position: relative;
+    margin: 15px 0;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cat-glow {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(253,160,133,0.15) 0%, transparent 70%);
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  .cat-emoji {
+    font-size: 100px;
+    z-index: 2;
+    transition: transform 0.1s;
+    filter: drop-shadow(0 0 20px rgba(253,160,133,0.3));
+  }
+
+  .cat-emoji.happy {
+    animation: cat-bounce 0.3s ease;
+  }
+
+  @keyframes cat-bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15) rotate(-3deg); }
+    60% { transform: scale(1.05) rotate(2deg); }
+    100% { transform: scale(1); }
+  }
+
+  /* Recovery bar */
+  .recovery-section {
+    width: 85%;
+    max-width: 360px;
+    margin: 5px 0 20px;
+    text-align: center;
+  }
+
+  .recovery-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+  }
+
+  .recovery-label span {
+    color: #fda085;
+    font-weight: 700;
+    font-size: 22px;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 22px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 11px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 11px;
+    background: linear-gradient(90deg, #f6d365, #fda085, #f093fb);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    min-width: 0;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .milestone-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+  }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    gap: 30px;
+    margin: 10px 0 25px;
+  }
+
+  .stat-box {
+    text-align: center;
+  }
+
+  .stat-box .num {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(180deg, #fff, rgba(255,255,255,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-box .label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  /* Tap button */
+  .tap-area {
+    position: relative;
+    margin: 5px 0 15px;
+  }
+
+  .tap-btn {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 50px;
+    background: linear-gradient(145deg, #2a2a4a, #1a1a3e);
+    box-shadow: 8px 8px 20px rgba(0,0,0,0.4), -4px -4px 12px rgba(255,255,255,0.03),
+                inset 0 0 30px rgba(253,160,133,0.05);
+    transition: transform 0.08s, box-shadow 0.08s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+  }
+
+  .tap-btn:active {
+    transform: scale(0.93);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.4), -2px -2px 6px rgba(255,255,255,0.02),
+                inset 0 0 40px rgba(253,160,133,0.1);
+  }
+
+  .tap-btn .muyu-text {
+    font-size: 48px;
+    filter: drop-shadow(0 0 10px rgba(253,160,133,0.3));
+  }
+
+  /* Floating text */
+  .float-text {
+    position: absolute;
+    pointer-events: none;
+    font-size: 18px;
+    font-weight: 700;
+    white-space: nowrap;
+    z-index: 100;
+    animation: float-up 1.2s ease-out forwards;
+  }
+
+  .float-merit {
+    color: #f6d365;
+    text-shadow: 0 0 10px rgba(246,211,101,0.5);
+  }
+
+  .float-recovery {
+    color: #f093fb;
+    text-shadow: 0 0 10px rgba(240,147,251,0.5);
+  }
+
+  .float-milestone {
+    font-size: 24px;
+    color: #fda085;
+    text-shadow: 0 0 20px rgba(253,160,133,0.8);
+    animation: float-up-big 1.8s ease-out forwards;
+  }
+
+  @keyframes float-up {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    80% { opacity: 0.8; }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.8); }
+  }
+
+  @keyframes float-up-big {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    30% { transform: translateY(-30px) scale(1.3); }
+    100% { opacity: 0; transform: translateY(-160px) scale(0.6); }
+  }
+
+  /* Mode toggle */
+  .mode-toggle {
+    display: flex;
+    background: rgba(255,255,255,0.06);
+    border-radius: 25px;
+    padding: 3px;
+    margin-bottom: 10px;
+  }
+
+  .mode-btn {
+    padding: 8px 20px;
+    border-radius: 22px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+
+  .mode-btn.active {
+    background: linear-gradient(135deg, rgba(246,211,101,0.2), rgba(253,160,133,0.2));
+    color: #fda085;
+    box-shadow: 0 2px 10px rgba(253,160,133,0.15);
+  }
+
+  /* Particles */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: particle-fly 1s ease-out forwards;
+  }
+
+  @keyframes particle-fly {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0) translateY(-80px); }
+  }
+
+  /* Full recovery celebration */
+  .celebration {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fade-in 0.5s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .celebration.hidden { display: none; }
+
+  .celebration h2 {
+    font-size: 28px;
+    background: linear-gradient(90deg, #f6d365, #fda085, #f093fb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 20px;
+  }
+
+  .celebration .big-cat {
+    font-size: 120px;
+    animation: cat-celebrate 1s ease-in-out infinite;
+  }
+
+  @keyframes cat-celebrate {
+    0%, 100% { transform: rotate(-5deg) scale(1); }
+    50% { transform: rotate(5deg) scale(1.1); }
+  }
+
+  .celebration p {
+    color: rgba(255,255,255,0.7);
+    margin-top: 10px;
+    font-size: 15px;
+  }
+
+  .celebration button {
+    margin-top: 25px;
+    padding: 12px 40px;
+    border-radius: 25px;
+    border: none;
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  /* Reset btn */
+  .reset-btn {
+    margin: 20px 0 40px;
+    padding: 8px 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .reset-btn:hover {
+    border-color: rgba(255,80,80,0.4);
+    color: rgba(255,80,80,0.6);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>六月康复祈福</h1>
+  <p>每敲一次木鱼，六月就离康复更近一步</p>
+</div>
+
+<div class="cat-container">
+  <div class="cat-glow"></div>
+  <div class="cat-emoji" id="catEmoji">🐱</div>
+</div>
+
+<div class="recovery-section">
+  <div class="recovery-label">六月康复度 <span id="recoveryPct">0%</span></div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <div class="milestone-text" id="milestoneText">再敲 100 次，康复度 +20%</div>
+</div>
+
+<div class="stats">
+  <div class="stat-box">
+    <div class="num" id="meritCount">0</div>
+    <div class="label">功德</div>
+  </div>
+  <div class="stat-box">
+    <div class="num" id="tapCount">0</div>
+    <div class="label">总敲击</div>
+  </div>
+</div>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" id="modeMerit" onclick="setMode('merit')">功德 +1</button>
+  <button class="mode-btn" id="modeRecovery" onclick="setMode('recovery')">六月康复 +1</button>
+</div>
+
+<div class="tap-area" id="tapArea">
+  <button class="tap-btn" id="tapBtn">
+    <span class="muyu-text">🪬</span>
+  </button>
+</div>
+
+<button class="reset-btn" onclick="resetAll()">重置</button>
+
+<div class="celebration hidden" id="celebration">
+  <div class="big-cat">😸</div>
+  <h2>六月完全康复了！</h2>
+  <p>感谢你的 500 次祈福 🙏</p>
+  <button onclick="closeCelebration()">继续祈福</button>
+</div>
+
+<script>
+  // State
+  let state = loadState();
+  let mode = 'merit'; // 'merit' or 'recovery'
+  let celebrationShown = false;
+
+  function defaultState() {
+    return { merit: 0, taps: 0, recovery: 0, tapsInCycle: 0 };
+  }
+
+  function loadState() {
+    try {
+      const s = JSON.parse(localStorage.getItem('junecat'));
+      return s && typeof s.merit === 'number' ? s : defaultState();
+    } catch { return defaultState(); }
+  }
+
+  function saveState() {
+    localStorage.setItem('junecat', JSON.stringify(state));
+  }
+
+  function render() {
+    document.getElementById('meritCount').textContent = state.merit;
+    document.getElementById('tapCount').textContent = state.taps;
+    document.getElementById('recoveryPct').textContent = state.recovery + '%';
+    document.getElementById('progressFill').style.width = Math.min(state.recovery, 100) + '%';
+
+    const remaining = 100 - state.tapsInCycle;
+    if (state.recovery >= 100) {
+      document.getElementById('milestoneText').textContent = '六月已完全康复！继续积攒功德吧';
+    } else {
+      document.getElementById('milestoneText').textContent = '再敲 ' + remaining + ' 次，康复度 +20%';
+    }
+
+    // Cat expression based on recovery
+    const cat = document.getElementById('catEmoji');
+    if (state.recovery >= 100) cat.textContent = '😸';
+    else if (state.recovery >= 60) cat.textContent = '😺';
+    else if (state.recovery >= 20) cat.textContent = '🐱';
+    else cat.textContent = '😿';
+  }
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('modeMerit').classList.toggle('active', m === 'merit');
+    document.getElementById('modeRecovery').classList.toggle('active', m === 'recovery');
+  }
+
+  function tap(e) {
+    e.preventDefault();
+    state.taps++;
+    state.tapsInCycle++;
+
+    if (mode === 'merit') {
+      state.merit++;
+      spawnFloat('功德 +1', 'float-merit');
+    } else {
+      state.merit++;
+      spawnFloat('六月康复 +1', 'float-recovery');
+    }
+
+    // Check milestone
+    if (state.tapsInCycle >= 100) {
+      state.tapsInCycle = 0;
+      if (state.recovery < 100) {
+        state.recovery += 20;
+        if (state.recovery > 100) state.recovery = 100;
+        setTimeout(() => spawnFloat('康复度 +20%！', 'float-milestone'), 200);
+
+        if (state.recovery >= 100 && !celebrationShown) {
+          celebrationShown = true;
+          setTimeout(showCelebration, 800);
+        }
+      }
+    }
+
+    // Cat bounce
+    const cat = document.getElementById('catEmoji');
+    cat.classList.remove('happy');
+    void cat.offsetWidth;
+    cat.classList.add('happy');
+
+    // Particles
+    spawnParticles(e);
+
+    saveState();
+    render();
+  }
+
+  function spawnFloat(text, cls) {
+    const area = document.getElementById('tapArea');
+    const el = document.createElement('div');
+    el.className = 'float-text ' + cls;
+    el.textContent = text;
+    const offsetX = (Math.random() - 0.5) * 80;
+    el.style.left = 'calc(50% + ' + offsetX + 'px)';
+    el.style.top = '-10px';
+    el.style.transform = 'translateX(-50%)';
+    area.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+  }
+
+  function spawnParticles(e) {
+    const colors = ['#f6d365', '#fda085', '#f093fb', '#a18cd1'];
+    for (let i = 0; i < 6; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 4 + Math.random() * 6;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+      const rect = document.getElementById('tapBtn').getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 40 + Math.random() * 60;
+      p.style.left = (cx + Math.cos(angle) * dist) + 'px';
+      p.style.top = (cy + Math.sin(angle) * dist) + 'px';
+
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1000);
+    }
+  }
+
+  function showCelebration() {
+    document.getElementById('celebration').classList.remove('hidden');
+  }
+
+  function closeCelebration() {
+    document.getElementById('celebration').classList.add('hidden');
+  }
+
+  function resetAll() {
+    if (confirm('确定要重置所有进度吗？')) {
+      state = defaultState();
+      celebrationShown = false;
+      saveState();
+      render();
+    }
+  }
+
+  // Bind tap
+  const btn = document.getElementById('tapBtn');
+  btn.addEventListener('click', tap);
+  btn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    tap(e);
+  });
+
+  // Audio context for haptic-like click sound
+  let audioCtx;
+  function playClick() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = 800;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.08);
+  }
+
+  btn.addEventListener('pointerdown', playClick);
+
+  // Init
+  render();
+</script>
+</body>
+</html>
