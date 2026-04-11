@@ -381,15 +381,15 @@
     <div class="label">功德</div>
   </div>
   <div class="stat-box">
+    <div class="num" id="recoveryCount">0</div>
+    <div class="label">六月康复</div>
+  </div>
+  <div class="stat-box">
     <div class="num" id="tapCount">0</div>
     <div class="label">总敲击</div>
   </div>
 </div>
 
-<div class="mode-toggle">
-  <button class="mode-btn active" id="modeMerit" onclick="setMode('merit')">功德 +1</button>
-  <button class="mode-btn" id="modeRecovery" onclick="setMode('recovery')">六月康复 +1</button>
-</div>
 
 <div class="tap-area" id="tapArea">
   <button class="tap-btn" id="tapBtn">
@@ -409,11 +409,10 @@
 <script>
   // State
   let state = loadState();
-  let mode = 'merit'; // 'merit' or 'recovery'
   let celebrationShown = false;
 
   function defaultState() {
-    return { merit: 0, taps: 0, recovery: 0, tapsInCycle: 0 };
+    return { merit: 0, recoveryTaps: 0, taps: 0, recovery: 0, tapsInCycle: 0 };
   }
 
   function loadState() {
@@ -429,6 +428,7 @@
 
   function render() {
     document.getElementById('meritCount').textContent = state.merit;
+    document.getElementById('recoveryCount').textContent = state.recoveryTaps;
     document.getElementById('tapCount').textContent = state.taps;
     document.getElementById('recoveryPct').textContent = state.recovery + '%';
     document.getElementById('progressFill').style.width = Math.min(state.recovery, 100) + '%';
@@ -448,22 +448,17 @@
     else cat.textContent = '😿';
   }
 
-  function setMode(m) {
-    mode = m;
-    document.getElementById('modeMerit').classList.toggle('active', m === 'merit');
-    document.getElementById('modeRecovery').classList.toggle('active', m === 'recovery');
-  }
-
   function tap(e) {
     e.preventDefault();
     state.taps++;
     state.tapsInCycle++;
 
-    if (mode === 'merit') {
+    // Random 50/50: merit or recovery
+    if (Math.random() < 0.5) {
       state.merit++;
       spawnFloat('功德 +1', 'float-merit');
     } else {
-      state.merit++;
+      state.recoveryTaps++;
       spawnFloat('六月康复 +1', 'float-recovery');
     }
 
